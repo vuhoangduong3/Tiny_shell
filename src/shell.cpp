@@ -33,12 +33,11 @@ extern void HandleExternalCommand(const char *CmdLine);
 //  Giu ASCII-only de khong phu thuoc console code page.
 // ============================================================================
 void PrintBanner(void) {
-    std::puts("");
-    std::puts("  ============================================");
-    std::puts("                  myShell v1.0                ");
-    std::puts("       Go 'help' de xem danh sach lenh       ");
-    std::puts("  ============================================");
-    std::puts("");
+    std::puts("======================================");
+    std::puts("        TINY SHELL - KHOI DONG");
+    std::puts(" Go 'help' de xem danh sach cac lenh");
+    std::puts("======================================");
+    std::puts("Welcome to TinyShell! Type 'help' for a list of commands.");
 }
 
 // ============================================================================
