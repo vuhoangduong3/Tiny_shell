@@ -8,9 +8,6 @@ int HandleBuiltinCommand(const std::string &Cmd) {
     return -1;
 }
 
-void HandleProcessCommand(const char *CmdLine) {
-    std::printf("  [stub] process command chua duoc cai dat: %s\n", CmdLine);
-}
 
 int HandleScriptCommand(const char *CmdLine) {
     std::printf("  [stub] script chua duoc cai dat: %s\n", CmdLine);

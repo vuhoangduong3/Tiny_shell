@@ -256,27 +256,25 @@ static void resume_process(uint32_t pid) {
     std::printf("  [resume] Đã resume PID %u.\n", pid);
 }
 
-int handle_process_command(const char *cmd_line) {
-    if (cmd_line == nullptr || cmd_line[0] == '\0') return 1;
+void HandleProcessCommand(const char *cmd_line) {
+    if (cmd_line == nullptr || cmd_line[0] == '\0') return;
 
     std::string command_line(cmd_line);
     std::string verb = to_lower(first_token(command_line));
 
     if (verb == "list") {
         print_running_processes();
-        return 1;
+        return;
     }
 
     uint32_t pid = 0;
     if (!parse_pid(command_args(command_line), pid)) {
         std::printf("  Cú pháp: %s <pid>\n", verb.c_str());
-        return 1;
+        return;
     }
 
     if (verb == "kill") kill_process(pid);
     else if (verb == "stop") stop_process(pid);
     else if (verb == "resume") resume_process(pid);
     else std::printf("  Lệnh quản lý process không hợp lệ: %s\n", verb.c_str());
-
-    return 1;
 }
