@@ -11,6 +11,7 @@ TARGET   = bin/myShell.exe
 SRCS = src/main.cpp \
        src/shell.cpp \
        src/parser.cpp \
+       src/process_manager.cpp \
        src/stubs.cpp
 
 OBJS = $(SRCS:src/%.cpp=build/%.o)
