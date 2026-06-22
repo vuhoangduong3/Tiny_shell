@@ -12,6 +12,7 @@ SRCS = src/main.cpp \
        src/shell.cpp \
        src/parser.cpp \
        src/process_manager.cpp \
+       src/signal_handler.cpp \
        src/stubs.cpp
 
 OBJS = $(SRCS:src/%.cpp=build/%.o)

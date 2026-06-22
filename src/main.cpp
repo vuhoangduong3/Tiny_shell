@@ -9,7 +9,7 @@
 #include "shell.hpp"
 #include "parser.hpp"
 
-extern void SetupCtrlCHandler(void);
+#include "signal_handler.hpp"
 
 namespace {
 
@@ -59,7 +59,7 @@ void RunRepl(void) {
 
 int main(void) {
     ConfigureConsole();
-    SetupCtrlCHandler();
+    setup_ctrl_c_handler();
     PrintBanner();
     RunRepl();
     return 0;

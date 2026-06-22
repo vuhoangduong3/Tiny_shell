@@ -17,5 +17,3 @@ int HandleScriptCommand(const char *CmdLine) {
 void HandleExternalCommand(const char *CmdLine) {
     std::printf("  [stub] external command chua duoc cai dat: %s\n", CmdLine);
 }
-
-void SetupCtrlCHandler(void) {}
