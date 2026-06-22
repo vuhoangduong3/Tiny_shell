@@ -1,9 +1,5 @@
 // filepath: src/main.cpp
-#ifdef _WIN32
 #include <windows.h>   // SetConsoleCP, GetCurrentDirectoryA, MAX_PATH
-#else
-#include <unistd.h>    // getcwd
-#endif
 
 #include <cstdio>
 #include <cstring>
@@ -13,29 +9,20 @@
 #include "shell.hpp"
 #include "parser.hpp"
 
-extern void SetupCtrlCHandler(void);
+#include "signal_handler.hpp"
 
 namespace {
 
 void ConfigureConsole(void) {
-#ifdef _WIN32
     SetConsoleCP(CP_UTF8);
     SetConsoleOutputCP(CP_UTF8);
-#endif
 }
 
 void PrintPrompt(void) {
-#ifdef _WIN32
     char cwd[MAX_PATH] = {};
     if (!GetCurrentDirectoryA(MAX_PATH, cwd)) {
         std::strcpy(cwd, "?");
     }
-#else
-    char cwd[1024] = {};
-    if (!getcwd(cwd, sizeof(cwd))) {
-        std::strcpy(cwd, "?");
-    }
-#endif
     std::printf("myShell\\%s>", cwd);
     std::fflush(stdout);
 }
@@ -72,7 +59,7 @@ void RunRepl(void) {
 
 int main(void) {
     ConfigureConsole();
-    SetupCtrlCHandler();
+    setup_ctrl_c_handler();
     PrintBanner();
     RunRepl();
     return 0;
