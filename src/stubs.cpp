@@ -3,11 +3,6 @@
 #include <cstdio>
 #include <string>
 
-int HandleBuiltinCommand(const std::string &Cmd) {
-    std::printf("  [stub] builtin chua duoc cai dat: %s\n", Cmd.c_str());
-    return -1;
-}
-
 
 int HandleScriptCommand(const char *CmdLine) {
     std::printf("  [stub] script chua duoc cai dat: %s\n", CmdLine);

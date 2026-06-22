@@ -18,6 +18,6 @@ struct BackgroundProcess {
 extern std::vector<BackgroundProcess> background_processes;
 
 // Các hàm giao tiếp chính ra bên ngoài
-int handle_process_command(const char *cmd_line);
+void HandleProcessCommand(const char *cmd_line);
 void cleanup_finished_processes();
 void print_running_processes();
