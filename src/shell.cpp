@@ -4,6 +4,7 @@
 #include <string>
 
 #include "parser.hpp"
+#include "executor.hpp"
 
 // ============================================================================
 //  Dispatcher: chuyen tiep lenh cho 4 module xu ly.
@@ -26,7 +27,7 @@ extern void HandleProcessCommand(const char *CmdLine);
 extern int  HandleScriptCommand(const char *CmdLine);
 
 // 4) External — DUONG (chay chuong trinh ngoai, nhan dien `&`)
-extern void HandleExternalCommand(const char *CmdLine);
+// (Đã được include qua executor.hpp)
 
 // ============================================================================
 //  Banner: in gioi thieu khi shell khoi dong.
