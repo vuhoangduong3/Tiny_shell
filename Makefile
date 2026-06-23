@@ -12,6 +12,8 @@ SRCS = src/main.cpp \
        src/shell.cpp \
        src/parser.cpp \
        src/builtins.cpp \
+       src/executor.cpp \
+       src/script_runner.cpp \
        src/process_manager.cpp \
        src/signal_handler.cpp \
        src/stubs.cpp
