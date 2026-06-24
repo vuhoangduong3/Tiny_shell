@@ -1,6 +1,6 @@
 # 🐚 TinyShell
 
-> **Bài tập lớn môn IT3070 — Cơ sở Tin học Ngành (CTTN K69)**
+> **Bài tập lớn môn IT3070**
 >
 > Shell dòng lệnh trên Windows viết bằng C++17, hỗ trợ built-in commands, thực thi chương trình ngoài (foreground/background), quản lý tiến trình nền và chạy script `.bat`.
 
@@ -44,98 +44,6 @@ myShell\E:\OS\tiny_shell>
 
 ---
 
-## 🏗 Kiến trúc
-
-```
-                    ┌──────────────────┐
-                    │    main.cpp      │
-                    │  REPL loop       │
-                    │  ReadLine →      │
-                    │  DispatchCommand  │
-                    └────────┬─────────┘
-                             │
-                    ┌────────▼─────────┐
-                    │    shell.cpp     │
-                    │  DispatchCommand  │
-                    │  (router)        │
-                    └────────┬─────────┘
-                             │
-            ┌────────────────┼────────────────┐
-            │                │                │
-   ┌────────▼──────┐ ┌──────▼───────┐ ┌──────▼───────┐
-   │  builtins.cpp │ │ process_mgr  │ │ executor.cpp │
-   │               │ │  .cpp        │ │              │
-   │ help/exit/    │ │ list/kill/   │ │ foreground / │
-   │ date/time/    │ │ stop/resume  │ │ background   │
-   │ dir/path/     │ │              │ │              │
-   │ addpath       │ │              │ │              │
-   └───────────────┘ └──────────────┘ └──────────────┘
-                                             │
-                                      ┌──────▼───────┐
-                                      │ script_runner│
-                                      │  .cpp        │
-                                      │ Đọc .bat →   │
-                                      │ DispatchCmd  │
-                                      └──────────────┘
-
-   ┌─────────────────┐    ┌─────────────────┐
-   │   parser.cpp    │    │ signal_handler  │
-   │ Trim/Token/Args │    │  .cpp           │
-   │ IsBat/IsProcess │    │ Ctrl+C handler  │
-   │ IsBackground    │    │ Job Object mgmt │
-   └─────────────────┘    └─────────────────┘
-```
-
-### Luồng xử lý lệnh (dispatch priority)
-
-```
-1. Built-in?     → HandleBuiltinCommand()    → return 0 (exit) / 1 (done) / -1 (not builtin)
-2. Process cmd?  → HandleProcessCommand()    → list / kill / stop / resume
-3. File .bat?    → HandleScriptCommand()     → đọc file, dispatch từng dòng
-4. Fallback      → HandleExternalCommand()   → foreground hoặc background (có &)
-```
-
----
-
-## 📁 Cấu trúc thư mục
-
-```
-tiny_shell/
-├── Makefile                    # Build script (MinGW)
-├── README.md
-├── todo.md                     # Phân công & tiến độ
-├── compile_flags.txt           # Flags cho clangd/IDE
-│
-├── include/                    # Header files
-│   ├── builtins.hpp            #   Built-in command interface
-│   ├── executor.hpp            #   External command executor
-│   ├── parser.hpp              #   String parsing utilities
-│   ├── process_manager.hpp     #   Background process tracking
-│   ├── script_runner.hpp       #   .bat file runner
-│   ├── shell.hpp               #   Banner + DispatchCommand
-│   └── signal_handler.hpp      #   Ctrl+C handler
-│
-├── src/                        # Source files
-│   ├── main.cpp                #   Entry point, REPL loop
-│   ├── shell.cpp               #   Banner + command dispatcher
-│   ├── parser.cpp              #   Trim, tokenize, detect .bat/&
-│   ├── builtins.cpp            #   help/exit/date/time/dir/path/addpath
-│   ├── executor.cpp            #   CreateProcessA, foreground/background
-│   ├── process_manager.cpp     #   list/kill/stop/resume + cleanup
-│   ├── script_runner.cpp       #   Read .bat, dispatch line by line
-│   ├── signal_handler.cpp      #   Ctrl+C, Job Object, console restore
-│   └── stubs.cpp               #   (placeholder cho mở rộng)
-│
-├── test_scripts/               # Script .bat để test
-│   ├── test1.bat               #   Test cơ bản: date, time, dir
-│   └── demo.bat                #   Demo đầy đủ tính năng
-│
-├── build/                      # Object files (.o)
-└── bin/                        # Output binary
-    └── myShell.exe
-```
-
----
 
 ## 🔨 Build & Chạy
 
