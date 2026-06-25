@@ -8,6 +8,7 @@
 #include <chrono>
 #include <ctime>
 #include <iomanip>
+#include <sstream>
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -21,14 +22,27 @@ int HandleBuiltinCommand(const std::string &Cmd) {
     std::string args = CommandArgs(Cmd);
 
     if (verb == "help") {
-        std::cout << "Available built-in commands:\n"
-                  << "  help              - Show this help message\n"
-                  << "  exit              - Exit the shell\n"
-                  << "  date              - Show current date\n"
-                  << "  time              - Show current time\n"
-                  << "  dir [path]        - List files and directories\n"
-                  << "  path              - Show current PATH\n"
-                  << "  addpath <dir>     - Add directory to PATH\n";
+        std::cout << "=== TinyShell - Danh sach tat ca cac lenh ===\n\n"
+
+                  << "[Built-in commands]\n"
+                  << "  help              - Hien thi danh sach lenh nay\n"
+                  << "  exit              - Thoat shell\n"
+                  << "  date              - Hien thi ngay hien tai\n"
+                  << "  time              - Hien thi gio hien tai\n"
+                  << "  dir [path]        - Liet ke file va thu muc\n"
+                  << "  path              - Hien thi bien moi truong PATH\n"
+                  << "  addpath <dir>     - Them thu muc vao PATH\n\n"
+
+                  << "[Process management]\n"
+                  << "  list              - Liet ke cac tien trinh background\n"
+                  << "  kill <pid>        - Ket thuc tien trinh theo PID\n"
+                  << "  stop <pid>        - Tam dung (suspend) tien trinh theo PID\n"
+                  << "  resume <pid>      - Tiep tuc (resume) tien trinh theo PID\n\n"
+                  << "  <file>.bat        - Chay file script .bat tung dong\n\n"
+
+                  << "[External commands]\n"
+                  << "  <command>         - Chay chuong trinh ngoai (foreground)\n"
+                  << "  <command> &       - Chay chuong trinh ngoai (background)\n";
         return 1;
     }
 
@@ -89,6 +103,7 @@ int HandleBuiltinCommand(const std::string &Cmd) {
         GetEnvironmentVariableA("PATH", &pathValue[0], size);
         // Remove trailing null terminator added by string constructor
         pathValue.pop_back();
+        const char delimiter = ';';
 #else
         const char* pathEnv = std::getenv("PATH");
         std::string pathValue = pathEnv ? pathEnv : "";
@@ -96,8 +111,19 @@ int HandleBuiltinCommand(const std::string &Cmd) {
             std::cout << "PATH is not set.\n";
             return 1;
         }
+        const char delimiter = ':';
 #endif
-        std::cout << "PATH=" << pathValue << "\n";
+        std::cout << "=== Current PATH ===\n";
+        std::istringstream stream(pathValue);
+        std::string dir;
+        int index = 1;
+        while (std::getline(stream, dir, delimiter)) {
+            if (!dir.empty()) {
+                std::cout << "  [" << std::setw(2) << index++ << "] " << dir << "\n";
+            }
+        }
+        std::cout << "====================\n";
+        std::cout << "Total: " << (index - 1) << " directories\n";
         return 1;
     }
 
@@ -105,6 +131,16 @@ int HandleBuiltinCommand(const std::string &Cmd) {
         if (args.empty()) {
             std::cerr << "addpath: missing directory argument\n"
                       << "Usage: addpath <dir>\n";
+            return 1;
+        }
+
+        // Validate that the path exists and is a directory
+        if (!fs::exists(args)) {
+            std::cerr << "addpath: '" << args << "': No such file or directory\n";
+            return 1;
+        }
+        if (!fs::is_directory(args)) {
+            std::cerr << "addpath: '" << args << "': Not a directory\n";
             return 1;
         }
 

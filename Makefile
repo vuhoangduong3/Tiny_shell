@@ -15,8 +15,7 @@ SRCS = src/main.cpp \
        src/executor.cpp \
        src/script_runner.cpp \
        src/process_manager.cpp \
-       src/signal_handler.cpp \
-       src/stubs.cpp
+       src/signal_handler.cpp
 
 OBJS = $(SRCS:src/%.cpp=build/%.o)
 
